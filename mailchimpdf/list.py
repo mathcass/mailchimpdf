@@ -40,7 +40,7 @@ def get_mailchimp_list(list_id):
 
     list_method = api.lists(list_id)
     members = []
-    apiargs = {'count': 25}
+    apiargs = {'count': 1000}
     first_batch = list_method.members.get(**apiargs)
     total_subscribers = first_batch['total_items']
     members.extend(first_batch['members'])
