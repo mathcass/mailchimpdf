@@ -37,16 +37,19 @@ def get_mailchimp_list(list_id):
     apikey = mcutil.get_mailchimp_apikey()
     endpoint = mcutil.get_mailchimp_endpoint(apikey)
     api = slumber.API(endpoint, auth=('', apikey))
-
     list_method = api.lists(list_id)
+
+    BATCH_SIZE = 1000
     members = []
-    apiargs = {'count': 1000}
-    first_batch = list_method.members.get(**apiargs)
-    total_subscribers = first_batch['total_items']
-    members.extend(first_batch['members'])
-    while len(members) < total_subscribers:
-        apiargs['offset'] = len(members)
-        members.extend(list_method.members.get(**apiargs)['members'])
+    apiargs = {'count': BATCH_SIZE}
+    batch = list_method.members.get(**apiargs)
+    members.extend(batch['members'])
+
+    while batch:
+        apiargs.setdefault('offset', 0)
+        apiargs['offset'] += BATCH_SIZE
+        batch = list_method.members.get(**apiargs)['members']
+        members.extend(batch)
 
     return members
 
