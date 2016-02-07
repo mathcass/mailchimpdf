@@ -4,7 +4,7 @@ except ImportError:
     from distutils.core import setup
 
 setup(name="mailchimpdf",
-      version="0.1.0",
+      version="0.1.1",
       description="MailChimp DataFrames",
       long_description=("An interface to the MailChimp API "
                         "to make lists available as pandas.DataFrame"
